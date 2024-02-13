@@ -1,0 +1,12 @@
+<div class="feedback-form">
+  <h2>Create Feedback</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="feedbackText">Feedback Text:</label>
+      <textarea id="feedbackText" name="feedbackText" [(ngModel)]="feedbackText" class="form-control" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+  </form>
+</div>
+
+<div *ngIf="errorText" class="error-message">{{ errorText }}</div>
