@@ -1,0 +1,13 @@
+﻿using System;
+
+namespace FeedbackAnalysisAI.BLL.Exceptions
+{
+    public class EntityArgumentNullException : ArgumentException
+    {
+        private const string ArgumentExeptionText = "This argument can`t be null :";
+
+        public EntityArgumentNullException(string objectName)
+        : base(ArgumentExeptionText + objectName)
+        { }
+    }
+}
