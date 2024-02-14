@@ -1,12 +1,12 @@
-<div *ngIf="userInfo">
+<div *ngIf="userInfo" class="user-info-container">
   <h2>Welcome, {{ userInfo.firstname }} {{ userInfo.lastname }}!</h2>
   <p>Your username: {{ userInfo.username }}</p>
   <p>Your email: {{ userInfo.email }}</p>
   <p>Your role: {{ userInfo.role }}</p>
-  <button (click)="goToAddFeedbackForm()">Add Feedback</button>
-  <button (click)="goToFeedbackChart()">View Feedback Chart</button> <!-- Добавленная кнопка -->
+  <button class="action-button" (click)="goToAddFeedbackForm()">Add Feedback</button>
+  <button class="action-button" (click)="goToFeedbackChart()">View Feedback Chart</button>
 </div>
 
-<div *ngIf="!userInfo">
+<div *ngIf="!userInfo" class="login-info">
   <p>Please log in to view your profile.</p>
 </div>

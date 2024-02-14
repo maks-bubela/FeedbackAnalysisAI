@@ -1,0 +1,24 @@
+.user-info-container {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.login-info p {
+  color: #ff0000; /* красный цвет текста для информации о входе */
+}
+
+.action-button {
+  background-color: #007bff; /* синий цвет для кнопок */
+  color: #fff; /* белый цвет текста на кнопках */
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #0056b3; /* изменение цвета кнопки при наведении */
+}

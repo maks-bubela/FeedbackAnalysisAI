@@ -1,10 +1,10 @@
-<form (ngSubmit)="onSubmit()">
-  <input type="text" name="username" [(ngModel)]="userRegistrationModel.username" placeholder="Username">
-  <input type="password" name="password" [(ngModel)]="userRegistrationModel.password" placeholder="Password">
-  <input type="password" name="rePassword" [(ngModel)]="userRegistrationModel.rePassword" placeholder="Re Password">
-  <input type="text" name="firstname" [(ngModel)]="userRegistrationModel.firstname" placeholder="Name">
-  <input type="text" name="lastname" [(ngModel)]="userRegistrationModel.lastname" placeholder="Surname">
-  <input type="email" name="email" [(ngModel)]="userRegistrationModel.email" placeholder="Email">
-  <button type="submit">SignUp</button>
+<form class="registration-form" (ngSubmit)="onSubmit()">
+  <input type="text" name="username" [(ngModel)]="userRegistrationModel.username" placeholder="Username" required>
+  <input type="password" name="password" [(ngModel)]="userRegistrationModel.password" placeholder="Password" required>
+  <input type="password" name="rePassword" [(ngModel)]="userRegistrationModel.rePassword" placeholder="Re-enter Password" required>
+  <input type="text" name="firstname" [(ngModel)]="userRegistrationModel.firstname" placeholder="First Name" required>
+  <input type="text" name="lastname" [(ngModel)]="userRegistrationModel.lastname" placeholder="Last Name" required>
+  <input type="email" name="email" [(ngModel)]="userRegistrationModel.email" placeholder="Email" required>
+  <button type="submit">Sign Up</button>
 </form>
 <div *ngIf="errorText" class="error-message">{{ errorText }}</div>
