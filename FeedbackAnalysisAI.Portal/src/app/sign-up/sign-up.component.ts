@@ -11,9 +11,26 @@ import { Router } from '@angular/router';
 export class SignUpComponent {
   userRegistrationModel: UserRegistrationModel = new UserRegistrationModel();
   errorText: string = '';
+  isAuthenticated: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router) { }
-
+  ngOnInit() {
+    this.apiService.checkAuthAndFetchUserInfo().subscribe(
+      user => {
+        if (user) {
+          this.isAuthenticated = true;
+          // Перенаправить пользователя на другую страницу, если он уже аутентифицирован
+          this.router.navigate(['/user-panel']); // Предположим, что '/dashboard' - это путь к панели управления пользователями
+        } else {
+          this.isAuthenticated = false;
+        }
+      },
+      error => {
+        console.error('Error checking authentication:', error);
+        this.isAuthenticated = false;
+      }
+    );
+  }
   onSubmit() {
     this.errorText = ''; 
 
