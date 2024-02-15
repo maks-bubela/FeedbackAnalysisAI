@@ -18,7 +18,7 @@ export class FeedbackChartComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.feedbackService.getFeedbacksListInfo().subscribe(
       (data: any) => {
-        console.log('Received data:', data); // Log data to console
+        console.log('Received data:', data); 
         this.feedbackData = data.feedbacksListInfo;
         if (this.chartRendered && this.feedbackData.length > 0) {
           this.renderChart();

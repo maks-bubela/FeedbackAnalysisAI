@@ -22,10 +22,8 @@ export class FeedbackService {
   }
 
   addFeedback(feedbackText: string): Observable<any> {
-    // Получаем токен из localStorage
     const token = localStorage.getItem('accessToken');
     
-    // Подготавливаем заголовки запроса с токеном
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -33,7 +31,6 @@ export class FeedbackService {
       })
     };
 
-    // Отправляем POST запрос с заголовками и телом запроса
     return this.http.post<any>(`${this.apiUrl}/add`, { Text: feedbackText }, httpOptions);
   }
 }

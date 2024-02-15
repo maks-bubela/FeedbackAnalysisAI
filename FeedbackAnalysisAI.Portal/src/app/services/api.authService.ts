@@ -13,31 +13,31 @@ import { UserLoginModel } from '../models/UserLoginModel';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://localhost:44369/api/authentication'; // Замените на URL вашего .NET API
-  private apiUrlUser = 'https://localhost:44369/api/user'; // Замените на URL вашего .NET API
+  private apiUrl = 'https://localhost:44369/api/authentication'; 
+  private apiUrlUser = 'https://localhost:44369/api/user'; 
   constructor(private http: HttpClient) { }
 
-  // Метод для проверки токена и получения информации о пользователе
+
   checkAuthAndFetchUserInfo(): Observable<any> {
     const token = localStorage.getItem('accessToken');
 
     if (!token) {
-      // Если токен отсутствует, возвращаем пустое значение
+      
       return of(null);
     }
 
-    // Если токен присутствует, отправляем запрос на получение информации о пользователе с заголовком Authorization
+  
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
     return this.http.get<any>(`${this.apiUrlUser}/info`, { headers: headers }).pipe(
       map(response => {
-        // Обработка успешного ответа
+        
         return response;
       }),
       catchError(error => {
-        // Обработка ошибки (например, если токен недействителен или произошла ошибка на сервере)
+        
         console.error('Failed to fetch user info:', error);
         return of(null);
       })

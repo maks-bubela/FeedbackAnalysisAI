@@ -19,8 +19,7 @@ export class SignInComponent {
       user => {
         if (user) {
           this.isAuthenticated = true;
-          // Перенаправить пользователя на другую страницу, если он уже аутентифицирован
-          this.router.navigate(['/user-panel']); // Предположим, что '/dashboard' - это путь к панели управления пользователями
+          this.router.navigate(['/user-panel']); 
         } else {
           this.isAuthenticated = false;
         }

@@ -9,18 +9,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-panel.component.css']
 })
 export class UserPanelComponent implements OnInit {
-  userInfo: any; // You can explicitly define the type of userInfo
+  userInfo: any; 
 
   constructor(@Inject(ApiService) private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
     this.apiService.checkAuthAndFetchUserInfo().subscribe(
-      (userInfo: any) => { // Define the type of userInfo
-        // Handle successful response - save user information
+      (userInfo: any) => { 
         this.userInfo = userInfo;
       },
-      (error: any) => { // Define the type of error
-        // Handle error fetching user information
+      (error: any) => { 
         console.error('Failed to fetch user info:', error);
       }
     );
@@ -28,7 +26,7 @@ export class UserPanelComponent implements OnInit {
     goToAddFeedbackForm(): void {
     this.router.navigate(['/feedback-create']);
   }
-    goToFeedbackChart(): void { // Добавленный метод для навигации к feedback-chart
+    goToFeedbackChart(): void { 
     this.router.navigate(['/feedback-chart']);
   }
 }
