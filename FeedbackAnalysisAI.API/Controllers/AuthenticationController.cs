@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using FeedbackAnalysisAI.API.ExtensionMethods;
-using FeedbackAnalysisAI.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using FeedbackAnalysisAI.Contracts.Models;
 using System.Security.Claims;
 using FeedbackAnalysisAI.Contracts.Consts;
 using FeedbackAnalysisAI.Contracts.Services;
-using FeedbackAnalysisAI.Contracts.Enums;
 using FeedbackAnalysisAI.Contracts.DTO;
-using System.Text.RegularExpressions;
 
 namespace FeedbackAnalysisAI.API.Controllers
 {
@@ -24,24 +19,19 @@ namespace FeedbackAnalysisAI.API.Controllers
         #region Services
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        private readonly IAuthOptions _authOptions;
         private readonly ITokenService _tokenService;
-        private readonly EnvirementTypes _envirementType;
         private readonly IUserService _userService;
-        private readonly IDistributedCache _cache;
         #endregion
 
 
         public AuthenticationController(ITokenService tokenService, IAccountService accountService,
-            IMapper mapper, IAuthOptions authOptions, IUserService userService, IDistributedCache cache)
+            IMapper mapper, IUserService userService)
         {
             _accountService = accountService ?? throw new ArgumentNullException(nameof(IAccountService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(IMapper));
-            _authOptions = authOptions ?? throw new ArgumentNullException(nameof(IAuthOptions));
+           //_authOptions = authOptions ?? throw new ArgumentNullException(nameof(IAuthOptions));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(ITokenService));
-            _envirementType = EnvirementTypes.Development;
             _userService = userService ?? throw new ArgumentNullException(nameof(IUserService));
-            _cache = cache ?? throw new ArgumentNullException(nameof(IDistributedCache));
 
     }
 
@@ -64,17 +54,40 @@ namespace FeedbackAnalysisAI.API.Controllers
                 if (!verified)
                     return Conflict(new { errorText = InvalidUserData });
                 var identity = await GetIdentityAsync(customer);
-                var lifeTime = await _tokenService.GetTokenSettingsAsync(_envirementType);
-                if (lifeTime == 0)
-                    return NoContent();
-                var encodedJwt = await GetTokenAsync(identity, lifeTime, customer.Username);
-                var response = new
-                {
-                    access_token = encodedJwt
-                };
-                return Json(response);
+                var fingerprint = HttpContext.Connection.RemoteIpAddress.ToString();
+
+                var tokensDTO = await _tokenService.AddRefreshTokenAsync(identity, fingerprint);
+                var tokens = _mapper.Map<TokensModel>(tokensDTO);
+                if (tokens == null)
+                    return StatusCode(500);
+                return Ok(tokens);
             }
             return BadRequest(new { errorText = InvalidUserData });
+        }
+
+        /// <summary>
+        /// Refresh  customer token if old token not expired
+        /// </summary>
+        /// <param name="tokenModel">Old refresh and access token</param>
+        /// <returns></returns>
+        /// <response code="200"> Token is refreshed </response>
+        /// <response code="401"> Refresh token not valid </response>
+        /// <response code="204"> Not founded environment type </response>
+        /// <response code="400">Model not valid</response>    
+        [HttpPost]
+        [Route("refresh/token")]
+        public async Task<IActionResult> RefreshTokenAsync(TokensModel tokenModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string fingerPrint = HttpContext.Connection.RemoteIpAddress.ToString();
+                var tokensDTO = _mapper.Map<TokensDTO>(tokenModel);
+                var tokens = await _tokenService.RefreshTokenProccessingAsync(fingerPrint, tokensDTO);
+                if (tokens == null)
+                    return Unauthorized();
+                return Ok(tokens);
+            }
+            return BadRequest();
         }
 
         /// <summary>
@@ -110,7 +123,12 @@ namespace FeedbackAnalysisAI.API.Controllers
             return BadRequest(new { errorText = InvalidModel });
         }
 
-        // Private method that return claims identity about user
+        /// <summary>
+        /// Private method that return claims identity about user
+        /// </summary>
+        /// <param name="customerRegist">User and login information for registration</param>
+        /// <param name="roleName">User role name</param>
+        /// <returns></returns>
         private async Task<ClaimsIdentity> GetIdentityAsync(UserLoginModel customerModel)
         {
             var verified = await _accountService.VerifyCredentialsAsync(customerModel.Username, customerModel.Password);
@@ -132,24 +150,6 @@ namespace FeedbackAnalysisAI.API.Controllers
                 }
             }
             return null;
-        }
-
-        private async Task<string> GetTokenAsync(ClaimsIdentity identity, int lifeTime, string username)
-        {
-            var tokenSettingsDto = new TokenSettingsDTO()
-            {
-                Identity = identity,
-                LifeTime = lifeTime
-            };
-            var cachedToken = await _cache.GetStringAsync(username + TokenConsts.CacheTokenAccess);
-            if (cachedToken == null)
-            {
-                var encodedJwt = _authOptions.GetSymmetricSecurityKey(tokenSettingsDto);
-                await _cache.SetStringWithExpirationAsync(username + TokenConsts.CacheTokenAccess, encodedJwt, TimeSpan.FromMinutes(lifeTime));
-                return encodedJwt;
-            }
-            cachedToken = Regex.Match(cachedToken, @"\""(.*?)\""").Groups[1].Value;
-            return cachedToken;
         }
     }
 }
