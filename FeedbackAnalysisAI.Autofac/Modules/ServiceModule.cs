@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using FeedbackAnalysisAI.BLL.Cryptography;
 using FeedbackAnalysisAI.BLL.Services;
+using FeedbackAnalysisAI.BLL.JwtConfig.Provider;
 using FeedbackAnalysisAI.Contracts.Services;
 
 
@@ -16,6 +17,7 @@ namespace FeedbackAnalysisAI.Autofac.Modules
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<TokenService>().As<ITokenService>();
             builder.RegisterType<PasswordProcessing>().As<IPasswordProcessing>();
+            builder.RegisterType<AuthOptions>().As<IAuthOptions>();
 
             base.Load(builder);
         }

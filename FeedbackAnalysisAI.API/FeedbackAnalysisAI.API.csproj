@@ -20,7 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <ProjectReference Include="..\FeedbackAnalysisAI.Autofac\FeedbackAnalysisAI.Autofac.csproj" />
+
+    <ProjectReference Include="..\FeedbackAnalysisAI.BLL\FeedbackAnalysisAI.BLL.csproj" />
+
     <ProjectReference Include="..\FeedbackAnalysisAI.Contracts\FeedbackAnalysisAI.Contracts.csproj" />
   </ItemGroup>
 

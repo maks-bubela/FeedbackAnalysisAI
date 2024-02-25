@@ -1,4 +1,4 @@
-﻿namespace FeedbackAnalysisAI.API.JwtConfig.JwtSettings
+﻿namespace FeedbackAnalysisAI.BLL.JwtConfig.JwtSettings
 {
     public class JwtSetting
     {

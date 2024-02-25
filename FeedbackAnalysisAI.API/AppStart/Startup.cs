@@ -35,7 +35,6 @@ namespace FeedbackAnalysisAI.API.AppStart
             services.AddJwtToken(Configuration);
             services.AddOptions();
             services.AddMvc(options => options.Filters.Add(new ExceptionFilter()));
-            services.AddCustomRedisCache(Configuration);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

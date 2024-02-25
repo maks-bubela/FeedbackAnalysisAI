@@ -1,9 +1,8 @@
-﻿using FeedbackAnalysisAI.API.JwtConfig.JwtSettings;
+﻿using FeedbackAnalysisAI.BLL.JwtConfig.JwtSettings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
 
 namespace FeedbackAnalysisAI.API.ExtensionMethods
 {
@@ -40,6 +39,8 @@ namespace FeedbackAnalysisAI.API.ExtensionMethods
                     .Build();
             });
             services.Configure<JwtSetting>(Configuration.GetSection(JwtSettingsName));
+
+
         }
     }
 }
