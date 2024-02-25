@@ -16,6 +16,7 @@ namespace FeedbackAnalysisAI.DAL.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<RefreshTokens> RefreshTokens { get; set; }
         public DbSet<Sentiment> Sentiments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<BearerTokenSetting> BearerTokenSettings { get; set; }

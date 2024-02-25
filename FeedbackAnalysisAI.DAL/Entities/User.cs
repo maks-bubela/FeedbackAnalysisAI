@@ -16,6 +16,7 @@ namespace FeedbackAnalysisAI.DAL.Entities
         public bool IsDelete { get; set; }
         public string Salt { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
+        public virtual ICollection<RefreshTokens> RefreshTokens { get; set; } = new HashSet<RefreshTokens>();
 
     }
 }

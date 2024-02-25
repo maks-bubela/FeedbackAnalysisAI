@@ -15,6 +15,10 @@ namespace FeedbackAnalysisAI.DAL.Configurations
             builder.HasMany(u => u.Feedbacks)
                 .WithOne(u => u.User)
                 .HasForeignKey(u => u.UserId).IsRequired();
+
+            builder.HasMany(u => u.RefreshTokens)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserId).IsRequired();
         }
     }
 }
